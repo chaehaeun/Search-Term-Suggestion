@@ -36,6 +36,11 @@ const Recommend = ({ results, handleValue, keyword }: RecommendProps) => {
     }
   };
 
+  const handleResultClick = (event: React.MouseEvent<HTMLLIElement>) => {
+    const keyword = event.currentTarget.textContent;
+    handleValue(keyword!);
+  };
+
   useEffect(() => {
     if (focusedIndex !== null && listRefs.current[focusedIndex]) {
       listRefs.current[focusedIndex]?.focus();
@@ -49,6 +54,7 @@ const Recommend = ({ results, handleValue, keyword }: RecommendProps) => {
           tabIndex={0}
           key={index}
           ref={(el) => (listRefs.current[index] = el)}
+          onClick={handleResultClick}
           onKeyDown={(e) => handleKeyDown(e)}
         >
           <BiSearchAlt2 />
@@ -69,11 +75,13 @@ const List = styled.li`
   display: flex;
   align-items: center;
   padding: 0.5rem;
+  cursor: pointer;
   > svg {
     margin-right: 0.5rem;
   }
 
-  &:focus {
+  &:focus,
+  &:hover {
     background-color: #eee;
     outline: none;
   }
