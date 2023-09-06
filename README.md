@@ -39,7 +39,7 @@ git clone https://github.com/chaehaeun/Search-Term-Suggestion.git
 npm install
 ```
 
-3. 서버 레포를 클론 후 서버를 실행합니다.
+3. 서버 레포 클론 후 서버를 실행합니다.
 
 ```bash
 git clone https://github.com/walking-sunset/assignment-api.git
@@ -95,12 +95,22 @@ npm run dev
 
 ## ✏️ 구현 내용
 
+| 검색어 추천                       |
+| --------------------------------- |
+| ![검색어 추천](./docs/search.gif) |
+
 #### 질환명 검색시 API 호출 통해서 검색어 추천 기능 구현
 
 - `#httpClient`
   - 프라이빗 필드로 설정하여 외부에서 접근 또는 수정하지 못하게 했습니다. 이로 인해 HttpService 사용자가 httpClient에 직접 접근하여 변경하는 것을 방지하였습니다.
 
 #### API 호출별로 로컬 캐싱 구현
+
+| 로컬 캐싱 기능            |
+| ------------------------- |
+| ![캐싱](./docs/cache.gif) |
+
+[👉 httpClient 소스코드로 이동](./src/api/httpClient.ts)
 
 - `search`:
   - 인자로 들어온 키워드로 API를 호출하고, 결과를 세션 스토리지에 캐시한 후 반환합니다.
@@ -122,3 +132,6 @@ npm run dev
 - `useDebounceSearch` 커스텀 훅을 통해 0.3초 이내에 입력이 들어오면 API를 호출하지 않도록 구현했습니다.
 
 #### 키보드만으로 추천 검색어들로 이동 가능하도록 구현
+
+- `li` 태그에 `tabIndex` 속성을 추가하여 탭으로 목록에 접근할 수 있도록 구현했습니다.
+- `onKeyDown` 이벤트 헨들러를 통해 키보드 화살표로 추천 검색어들을 이동할 수 있도록 구현했습니다.
