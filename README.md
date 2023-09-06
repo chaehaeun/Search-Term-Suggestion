@@ -55,6 +55,16 @@ npm run dev
 
 ## 🚀 배포 링크
 
+api 서버가 따로 존재하지 않기 때문에 정상적인 서비스 확인을 위해서는 로컬 db 서버를 구동해야 합니다.
+
+```bash
+git clone https://github.com/walking-sunset/assignment-api.git
+npm install
+npm start
+```
+
+[👉 배포 링크로 이동](https://search-term-suggestion.vercel.app/)
+
 ## 🗂️ 폴더 구조
 
 ```zsh
