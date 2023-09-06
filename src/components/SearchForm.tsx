@@ -2,58 +2,35 @@ import styled from "styled-components";
 import { a11yHidden } from "@/globalStyles";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { Recommend } from "@/components";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { httpService } from "@/api";
-import { DEBOUNCE_TIME } from "@/constants";
+import { useCallback, useRef, useState } from "react";
+import { useDebounce } from "@/hooks";
 
 const SearchForm = () => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const { searchTerm, results, setSearchTerm } = useDebounce("");
   const [toggleRecommend, setToggleRecommend] = useState<boolean>(false);
-  const [searchResults, setSearchResults] = useState<string[]>([]);
+  const isRecommendVisible = !!results.length;
   const searchRef = useRef<HTMLInputElement>(null);
-  const isRecommend = !!searchResults.length;
 
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await httpService.search(searchTerm);
-
-      setSearchResults(response);
-    };
-
-    const debounceTimer = setTimeout(() => {
-      fetchData();
-    }, DEBOUNCE_TIME);
-
-    return () => {
-      clearTimeout(debounceTimer);
-    };
-  }, [searchTerm]);
-
-  const handleInputChange = () => {
-    if (searchRef.current === null) {
-      return;
-    }
-
-    if (searchRef.current.value === "") {
-      setToggleRecommend(false);
-    } else {
-      setToggleRecommend(true);
-    }
-
-    setSearchTerm(searchRef.current.value);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setToggleRecommend(value !== "");
   };
 
-  const handleValue = useCallback((value: string) => {
-    setSearchTerm(value);
-    if (searchRef.current) {
-      searchRef.current.value = value;
-    }
-    setToggleRecommend(false);
-  }, []);
+  const handleValue = useCallback(
+    (value: string) => {
+      setSearchTerm(value);
+      if (searchRef.current) {
+        searchRef.current.value = value;
+      }
+      setToggleRecommend(false);
+    },
+    [setSearchTerm]
+  );
 
   return (
     <Wrapper>
@@ -72,9 +49,9 @@ const SearchForm = () => {
       </form>
       <RecommendWrapper $isVisible={toggleRecommend}>
         <RecommendKeyword>추천 검색어</RecommendKeyword>
-        {isRecommend ? (
+        {isRecommendVisible ? (
           <Recommend
-            results={searchResults}
+            results={results}
             handleValue={handleValue}
             keyword={searchTerm}
           />
