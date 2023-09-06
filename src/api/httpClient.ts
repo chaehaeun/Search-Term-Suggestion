@@ -1,4 +1,4 @@
-import { CACHE_EXPIRE_TIME, CACHE_KEY } from "@/constants";
+import { BASE_URL, CACHE_EXPIRE_TIME, CACHE_KEY } from "@/constants";
 import axios, { AxiosInstance } from "axios";
 
 type SickItem = {
@@ -9,9 +9,9 @@ type SickItem = {
 class HttpService {
   #httpClient: AxiosInstance;
 
-  constructor() {
+  constructor(BASE_URL: string) {
     this.#httpClient = axios.create({
-      baseURL: "http://localhost:4000",
+      baseURL: BASE_URL,
     });
   }
 
@@ -38,7 +38,7 @@ class HttpService {
     sessionStorage.setItem(CACHE_KEY, JSON.stringify(currentCache));
   };
 
-  search = async (keyword: string): Promise<string[]> => {
+  search = async (endpoint: string, keyword: string): Promise<string[]> => {
     if (keyword.trim().length === 0) return [];
 
     const cache = this.#getCacheData();
@@ -52,7 +52,7 @@ class HttpService {
 
     const params = { q: keyword };
     console.info("calling api");
-    const response = await this.#httpClient.get("/sick", { params });
+    const response = await this.#httpClient.get(endpoint, { params });
     const sickNmArray = response.data.map((item: SickItem) => item.sickNm);
 
     this.#setCacheData(keyword, sickNmArray);
@@ -61,4 +61,4 @@ class HttpService {
   };
 }
 
-export default new HttpService();
+export default new HttpService(BASE_URL);
