@@ -63,7 +63,6 @@ const highlightKeywords = (result: string, keyword: string) => {
   const keywordPart = result.slice(index, index + keyword.length);
   const afterKeyword = result.slice(index + keyword.length);
 
-  console.log(beforeKeyword, keywordPart, afterKeyword);
   return (
     <>
       {beforeKeyword}
