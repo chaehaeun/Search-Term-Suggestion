@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { BiSearchAlt2 } from "react-icons/bi";
+import { useState, useRef, useEffect } from "react";
 
 interface RecommendProps {
   results: string[];
@@ -8,19 +9,50 @@ interface RecommendProps {
 }
 
 const Recommend = ({ results, handleValue, keyword }: RecommendProps) => {
+  const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
+  const listRefs = useRef<(HTMLLIElement | null)[]>([]);
+
+  useEffect(() => {
+    listRefs.current = listRefs.current.slice(0, results.length);
+  }, [results]);
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLLIElement>) => {
-    if (event.key === "Enter") {
-      const keyword = event.currentTarget.textContent;
-      handleValue(keyword!);
+    switch (event.key) {
+      case "Enter": {
+        const keyword = event.currentTarget.textContent;
+        handleValue(keyword!);
+        break;
+      }
+      case "ArrowDown":
+        setFocusedIndex((prev) =>
+          prev !== null && prev < results.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case "ArrowUp":
+        setFocusedIndex((prev) =>
+          prev !== null && prev > 0 ? prev - 1 : results.length - 1
+        );
+        break;
     }
   };
+
+  useEffect(() => {
+    if (focusedIndex !== null && listRefs.current[focusedIndex]) {
+      listRefs.current[focusedIndex]?.focus();
+    }
+  }, [focusedIndex]);
 
   return (
     <Ul>
       {results.map((result, index) => (
-        <List tabIndex={0} key={index} onKeyDown={handleKeyDown}>
+        <List
+          tabIndex={0}
+          key={index}
+          ref={(el) => (listRefs.current[index] = el)}
+          onKeyDown={(e) => handleKeyDown(e)}
+        >
           <BiSearchAlt2 />
-          {highlightKeywords(result, keyword)}
+          <span>{highlightKeywords(result, keyword)}</span>
         </List>
       ))}
     </Ul>
@@ -46,7 +78,7 @@ const List = styled.li`
     outline: none;
   }
 
-  > strong {
+  > span > strong {
     color: #017be9;
   }
 `;
