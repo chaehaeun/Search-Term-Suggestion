@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance } from "axios";
 
 type SickItem = {
   sickCd: string;
@@ -14,8 +14,11 @@ class HttpService {
     });
   }
 
-  search = async (keyword: string): Promise<AxiosResponse> => {
+  search = async (keyword: string): Promise<string[]> => {
+    if (keyword.trim().length === 0) return [];
+
     const params = { q: keyword };
+    console.info("calling api");
     const response = await this.httpClient.get("/sick", { params });
     const sickNmArray = response.data.map((item: SickItem) => item.sickNm);
 
