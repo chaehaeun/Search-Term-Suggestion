@@ -16,8 +16,7 @@ const GlobalStyles = createGlobalStyle`
     }
     body{
         line-height: 1;
-        font-family: 'Noto Sans KR', sans-serif;
-        margin-bottom: 100px;
+        font-family: "Pretendard Variable",'Noto Sans KR', sans-serif;
     }
     ol, ul{
         list-style: none;
@@ -27,10 +26,7 @@ const GlobalStyles = createGlobalStyle`
         background: transparent;
         cursor: pointer;
     }
-    #root{
-        max-width: 1200px;
-        margin: 0 auto;
-    }
+   
     `;
 
 export const a11yHidden = css`
