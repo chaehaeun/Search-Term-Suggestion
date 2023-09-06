@@ -2,14 +2,13 @@ import styled from "styled-components";
 import { a11yHidden } from "@/globalStyles";
 import { BiSearchAlt2 } from "react-icons/bi";
 import { Recommend } from "@/components";
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDebounce } from "@/hooks";
 
 const SearchForm = () => {
   const { searchTerm, results, setSearchTerm } = useDebounce("");
   const [toggleRecommend, setToggleRecommend] = useState<boolean>(false);
   const isRecommendVisible = !!results.length;
-  const searchRef = useRef<HTMLInputElement>(null);
 
   const submitSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,9 +23,6 @@ const SearchForm = () => {
   const handleValue = useCallback(
     (value: string) => {
       setSearchTerm(value);
-      if (searchRef.current) {
-        searchRef.current.value = value;
-      }
       setToggleRecommend(false);
     },
     [setSearchTerm]
@@ -37,7 +33,7 @@ const SearchForm = () => {
       <form onSubmit={submitSearch}>
         <Label htmlFor="search">검색폼</Label>
         <Input
-          ref={searchRef}
+          value={searchTerm}
           type="search"
           id="search"
           placeholder="질환명을 입력해주세요."
