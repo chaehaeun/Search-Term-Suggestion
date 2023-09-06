@@ -17,7 +17,16 @@ class HttpService {
 
   #getCacheData = () => {
     const cacheData = sessionStorage.getItem(CACHE_KEY);
-    return cacheData ? JSON.parse(cacheData) : {};
+    const parsedCache = cacheData ? JSON.parse(cacheData) : {};
+
+    Object.keys(parsedCache).forEach((key) => {
+      if (Date.now() - parsedCache[key].timestamp > CACHE_EXPIRE_TIME) {
+        delete parsedCache[key];
+      }
+    });
+
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(parsedCache));
+    return parsedCache;
   };
 
   #setCacheData = (keyword: string, data: string[]) => {
