@@ -39,27 +39,13 @@ git clone https://github.com/chaehaeun/Search-Term-Suggestion.git
 npm install
 ```
 
-3. 서버를 실행합니다.
-
-```bash
-npm run server
-```
-
-4. 로컬호스트를 실행합니다.
+3. 로컬호스트를 실행합니다.
 
 ```bash
 npm run dev
 ```
 
 ## 🚀 배포 링크
-
-api 서버가 따로 존재하지 않기 때문에 정상적인 서비스 확인을 위해서는 로컬 db 서버를 구동해야 합니다.
-
-```bash
-git clone https://github.com/walking-sunset/assignment-api.git
-npm install
-npm start
-```
 
 [👉 배포 링크로 이동](https://search-term-suggestion.vercel.app/)
 
